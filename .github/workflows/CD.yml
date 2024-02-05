@@ -3,6 +3,8 @@ name: CD
 
 on:
   push:
+    paths-ignore:
+      - '.github/**'
     branches:
       - main
 
