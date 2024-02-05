@@ -22,7 +22,7 @@ jobs:
         run: |
           cd src/stacks
           ls
-          rm -rf tata
+          rm -rf tatatoto
           git add .
           git commit -m "remove stack"
           git push -u origin HEAD
