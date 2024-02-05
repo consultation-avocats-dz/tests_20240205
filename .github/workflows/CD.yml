@@ -34,19 +34,3 @@ jobs:
           git add .
           git commit -m "remove stack"
           git push origin chore/delete-stack-${{ github.run_id }}
-      
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v4
-        id: pr_creation
-        with:
-          base: main
-          title: "chore(${{ github.run_id }}): delete stacks"
-          commit-message: "chore(${{ github.run_id }}): delete stacks"
-          body: |
-            Delete stack
-          branch: "chore/delete-stack-${{ github.run_id }}"
-          delete-branch: false
-          assignees: ${{ github.actor }}
-          #token: ${{ steps.generate-token.outputs.token }}
-          committer: ${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
-
