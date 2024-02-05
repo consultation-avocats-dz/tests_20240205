@@ -26,7 +26,7 @@ jobs:
         run: |
           cd src/stacks
           ls
-          rm -rf tatatoto
+          rm -rf tata
           git status
       
       - name: Create Pull Request
