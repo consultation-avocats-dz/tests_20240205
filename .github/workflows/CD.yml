@@ -2,11 +2,13 @@
 name: CD
 
 on:
-  push:
-    paths-ignore:
-      - '.github/**'
+  pull_request:
+    types:
+      - opened
     branches:
       - main
+    paths-ignore:
+      - '.github/**'
 
 permissions:
   contents: write
