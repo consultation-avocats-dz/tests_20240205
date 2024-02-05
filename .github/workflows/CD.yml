@@ -22,7 +22,7 @@ jobs:
         run: |
           cd src/stacks
           ls
-          rm -rf tatatoto
+          rm -rf tata
           git add .
           git commit -m "remove stack"
           git push -u origin HEAD
@@ -31,16 +31,16 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         id: pr_creation
         with:
-        base: main
-        title: "chore(${{ github.run_id }}): delete stacks"
-        commit-message: "chore(${{ github.run_id }}): delete stacks"
-        body: |
-          Delete stack
-        branch: "chore/delete-stack-${{ github.run_id }}"
-        delete-branch: false
-        assignees: ${{ github.actor }}
-        #token: ${{ steps.generate-token.outputs.token }}
-        committer: consultation.avocats.dz@gmail.com <consultation.avocats.dz@gmail.com>
+          base: main
+          title: "chore(${{ github.run_id }}): delete stacks"
+          commit-message: "chore(${{ github.run_id }}): delete stacks"
+          body: |
+            Delete stack
+          branch: "chore/delete-stack-${{ github.run_id }}"
+          delete-branch: false
+          assignees: ${{ github.actor }}
+          #token: ${{ steps.generate-token.outputs.token }}
+          committer: consultation.avocats.dz@gmail.com <consultation.avocats.dz@gmail.com>
 
       - name: Enable Pull Request Automerge
         uses: peter-evans/enable-pull-request-automerge@v2.2.1
