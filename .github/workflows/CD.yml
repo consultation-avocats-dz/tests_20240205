@@ -24,7 +24,7 @@ jobs:
         run: |
           cd src/stacks
           ls
-          rm -rf tatatoto
+          rm -rf tata
           git status
           git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
           git config user.name "${{ github.actor }}"
