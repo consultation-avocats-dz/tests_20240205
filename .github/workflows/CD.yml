@@ -22,7 +22,8 @@ jobs:
         run: |
           cd src/stacks
           ls
-          rm -rf tata
+          rm -rf tatatoto
+          git status
           git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
           git config user.name "${{ github.actor }}"
           git add .
@@ -42,7 +43,7 @@ jobs:
           delete-branch: false
           assignees: ${{ github.actor }}
           #token: ${{ steps.generate-token.outputs.token }}
-          committer: consultation.avocats.dz@gmail.com <consultation.avocats.dz@gmail.com>
+          committer: ${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
 
       - name: Enable Pull Request Automerge
         uses: peter-evans/enable-pull-request-automerge@v2.2.1
