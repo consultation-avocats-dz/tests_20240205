@@ -57,6 +57,7 @@ jobs:
           git add .
           git commit -m "remove ${{ needs.set-env.outputs.env }} stack"
           git push origin chore/delete-${{ needs.set-env.outputs.env }}-stack-${{ github.run_id }}
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
         id: pr_creation
@@ -71,9 +72,9 @@ jobs:
           assignees: ${{ github.actor }}
           committer: ${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
 
-        - name: Enable Pull Request Automerge
-          if: steps.pr_creation.outputs.pull-request-operation == 'created' && ${{ needs.set-env.outputs.env == 'prod' }}
-          uses: peter-evans/enable-pull-request-automerge@v2.2.1
-          with:
-            pull-request-number: ${{ steps.pr_creation.outputs.pull-request-number }}
-            merge-method: squash
+      - name: Enable Pull Request Automerge
+        if: steps.pr_creation.outputs.pull-request-operation == 'created' && ${{ needs.set-env.outputs.env == 'prod' }}
+        uses: peter-evans/enable-pull-request-automerge@v2.2.1
+        with:
+          pull-request-number: ${{ steps.pr_creation.outputs.pull-request-number }}
+          merge-method: squash
