@@ -65,10 +65,3 @@ jobs:
           delete-branch: true
           assignees: ${{ github.actor }}
           committer: ${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
-
-      - name: Enable Pull Request Automerge
-        if: steps.pr_creation.outputs.pull-request-operation == 'created' && ${{ needs.set-env.outputs.env == 'prod' }}
-        uses: peter-evans/enable-pull-request-automerge@v3.0.0
-        with:
-          pull-request-number: ${{ steps.pr_creation.outputs.pull-request-number }}
-          merge-method: squash
