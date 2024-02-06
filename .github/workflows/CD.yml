@@ -67,7 +67,7 @@ jobs:
           commit-message: "chore(${{ github.run_id }}): delete stacks for ${{ needs.set-env.outputs.env }} accounts"
           body: |
             Delete ${{ needs.set-env.outputs.env }} accounts
-          branch: "chore/delete-${{ needs.set-env.outputs.env }}-account-${{ github.run_id }}"
+          branch: "chore/delete-${{ needs.set-env.outputs.env }}-stack-${{ github.run_id }}"
           delete-branch: true
           assignees: ${{ github.actor }}
           committer: ${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
