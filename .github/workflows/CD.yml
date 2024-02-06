@@ -49,7 +49,7 @@ jobs:
         run: |
           cd src/stacks/${{ needs.set-env.outputs.env }}
           ls
-          rm -rf tata
+          rm -rf tatatoto
 
       - name: Create Pull Request
         if: ${{ needs.set-env.outputs.env == 'prod' }}
