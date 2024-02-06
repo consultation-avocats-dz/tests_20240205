@@ -22,20 +22,20 @@ jobs:
       env: ${{ steps.set-target-env.outputs.env }}
     steps:
       - name: Set environment
-      id: set-target-env
-      run: |
-        ENV=""
-        [[ "$DEPLOY_QA" == true ]] && ENV=qa
-        [[ "$DEPLOY_PROD" == true ]] && ENV=prod
-        if [[ -z "$ENV" ]]; then
-        echo "::error ::Could not detect target environment... Abort."
-        exit 1
-        fi
-        echo "env=$ENV" >> "$GITHUB_OUTPUT"
-        echo "ENV is '$ENV'"
-      env:
-        DEPLOY_QA: ${{ contains(github.event.pull_request.labels.*.name, 'good first issue') }}
-        DEPLOY_PROD: ${{ github.ref == 'refs/heads/main' }}
+        id: set-target-env
+        run: |
+          ENV=""
+          [[ "$DEPLOY_QA" == true ]] && ENV=qa
+          [[ "$DEPLOY_PROD" == true ]] && ENV=prod
+          if [[ -z "$ENV" ]]; then
+          echo "::error ::Could not detect target environment... Abort."
+          exit 1
+          fi
+          echo "env=$ENV" >> "$GITHUB_OUTPUT"
+          echo "ENV is '$ENV'"
+        env:
+          DEPLOY_QA: ${{ contains(github.event.pull_request.labels.*.name, 'good first issue') }}
+          DEPLOY_PROD: ${{ github.ref == 'refs/heads/main' }}
   
   remove-stack:
     runs-on: ubuntu-latest
