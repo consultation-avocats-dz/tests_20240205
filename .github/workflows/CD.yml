@@ -47,18 +47,12 @@ jobs:
 
       - name: Commit Changes
         run: |
-          git checkout -b chore/delete-${{ needs.set-env.outputs.env }}-stack-${{ github.run_id }}
           cd src/stacks/${{ needs.set-env.outputs.env }}
           ls
           rm -rf tata
-          git status
-          git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
-          git config user.name "${{ github.actor }}"
-          git add .
-          git commit -m "remove ${{ needs.set-env.outputs.env }} stack"
-          git push origin chore/delete-${{ needs.set-env.outputs.env }}-stack-${{ github.run_id }}
 
       - name: Create Pull Request
+        if: ${{ needs.set-env.outputs.env == 'prod' }}
         uses: peter-evans/create-pull-request@v4
         id: pr_creation
         with:
@@ -67,7 +61,7 @@ jobs:
           commit-message: "chore(${{ github.run_id }}): delete stacks for ${{ needs.set-env.outputs.env }} accounts"
           body: |
             Delete ${{ needs.set-env.outputs.env }} accounts
-          branch: "chore/delete-${{ needs.set-env.outputs.env }}-account-${{ github.run_id }}"
+          branch: "chore/delete-${{ needs.set-env.outputs.env }}-stack-${{ github.run_id }}"
           delete-branch: true
           assignees: ${{ github.actor }}
           committer: ${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
