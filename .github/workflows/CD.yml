@@ -16,21 +16,65 @@ permissions:
   pull-requests: write
 
 jobs:
+  set-env:
+    runs-on: ubuntu-latest
+    outputs:
+      env: ${{ steps.set-target-env.outputs.env }}
+    steps:
+      - name: Set environment
+      id: set-target-env
+      run: |
+        ENV=""
+        [[ "$DEPLOY_QA" == true ]] && ENV=qa
+        [[ "$DEPLOY_PROD" == true ]] && ENV=prod
+        if [[ -z "$ENV" ]]; then
+        echo "::error ::Could not detect target environment... Abort."
+        exit 1
+        fi
+        echo "env=$ENV" >> "$GITHUB_OUTPUT"
+        echo "ENV is '$ENV'"
+      env:
+        DEPLOY_QA: ${{ contains(github.event.pull_request.labels.*.name, 'good first issue') }}
+        DEPLOY_PROD: ${{ github.ref == 'refs/heads/main' }}
+  
   remove-stack:
     runs-on: ubuntu-latest
+    needs:
+      - set-env
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Commit Changes
         run: |
           git checkout -b chore/delete-stack-${{ github.run_id }}
-          cd src/stacks
+          cd src/stacks/${{ needs.set-env.outputs.env }}
           ls
           rm -rf tata
           git status
           git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
           git config user.name "${{ github.actor }}"
           git add .
-          git commit -m "remove stack"
-          git push origin chore/delete-stack-${{ github.run_id }}
+          git commit -m "remove ${{ needs.set-env.outputs.env }} stack"
+          git push origin chore/delete-${{ needs.set-env.outputs.env }}-stack-${{ github.run_id }}
+      
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        id: pr_creation
+        with:
+          base: main
+          title: "chore(AWS-${{ github.run_id }}): delete stacks for ${{ needs.set-env.outputs.env }} accounts"
+          commit-message: "chore(${{ github.run_id }}): delete stacks for ${{ needs.set-env.outputs.env }} accounts"
+          body: |
+            Delete ${{ needs.set-env.outputs.env }} accounts
+            branch: "chore/delete-${{ needs.set-env.outputs.env }}-account-${{ github.run_id }}"
+            delete-branch: true
+            assignees: ${{ github.actor }}
+            committer: ${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com <${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com>
+
+        - name: Enable Pull Request Automerge
+          if: steps.pr_creation.outputs.pull-request-operation == 'created' && ${{ needs.set-env.outputs.env == 'prod' }}
+          uses: peter-evans/enable-pull-request-automerge@v2.2.1
+          with:
+            pull-request-number: ${{ steps.pr_creation.outputs.pull-request-number }}
+            merge-method: squash
