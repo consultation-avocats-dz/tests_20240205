@@ -47,7 +47,7 @@ jobs:
 
       - name: Commit Changes
         run: |
-          git checkout -b chore/delete-stack-${{ github.run_id }}
+          git checkout -b chore/delete-${{ needs.set-env.outputs.env }}-stack-${{ github.run_id }}
           cd src/stacks/${{ needs.set-env.outputs.env }}
           ls
           rm -rf tata
